@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Console | Simpli Motors</title>
+    <link rel="stylesheet" href="globals.css">
+</head>
+<body class="admin-page">
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="logo">
+                <span class="logo-text"><span class="pt1">Si</span><span class="pt2">mpli</span></span>
+            </div>
+            <nav class="admin-nav">
+                <a href="#" class="admin-nav-item active">Dashboard</a>
+                <a href="#" class="admin-nav-item">Inventory</a>
+                <a href="#" class="admin-nav-item">Inquiries</a>
+                <a href="#" class="admin-nav-item">Sales</a>
+                <a href="#" class="admin-nav-item">Customers</a>
+                <a href="#" class="admin-nav-item">Settings</a>
+            </nav>
+            <div style="margin-top: auto;">
+                <a href="index.html" class="admin-nav-item">Logout</a>
+            </div>
+        </aside>
+
+        <main class="admin-content">
+            <header class="admin-header">
+                <h1>Command Center</h1>
+                <div class="home-login" style="padding:0">
+                    <a href="#" class="nav-btn" style="padding: 8px 20px; font-size: 0.8rem;">Add Vehicle</a>
+                </div>
+            </header>
+
+            <section class="admin-stats">
+                <div class="stat-card">
+                    <span class="label">Total Revenue</span>
+                    <span class="value">$4.2M</span>
+                    <span class="trend">↑ 12.5% this month</span>
+                </div>
+                <div class="stat-card">
+                    <span class="label">Active Inventory</span>
+                    <span class="value">142</span>
+                    <span class="trend">Full Brand Coverage</span>
+                </div>
+                <div class="stat-card">
+                    <span class="label">New Inquiries</span>
+                    <span class="value">28</span>
+                    <span class="trend">↑ 4 today</span>
+                </div>
+                <div class="stat-card">
+                    <span class="label">Total Sold</span>
+                    <span class="value">856</span>
+                    <span class="trend">Life-time</span>
+                </div>
+            </section>
+
+            <div class="admin-grid">
+                <section class="admin-card">
+                    <h3>Recent Inventory Additions</h3>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Lamborghini</td>
+                                <td>Revuelto 2024</td>
+                                <td>$608,350</td>
+                                <td><span class="badge badge-active">In Stock</span></td>
+                                <td><button class="admin-btn-sm">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>Tesla</td>
+                                <td>Cybertruck</td>
+                                <td>$79,990</td>
+                                <td><span class="badge badge-pending">Reserved</span></td>
+                                <td><button class="admin-btn-sm">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>Rolls Royce</td>
+                                <td>Spectre 2024</td>
+                                <td>$413,000</td>
+                                <td><span class="badge badge-active">In Stock</span></td>
+                                <td><button class="admin-btn-sm">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>Bentley</td>
+                                <td>Mulliner Batur</td>
+                                <td>$1,950,000</td>
+                                <td><span class="badge badge-active">In Stock</span></td>
+                                <td><button class="admin-btn-sm">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>Porsche</td>
+                                <td>Taycan Turbo S</td>
+                                <td>$194,900</td>
+                                <td><span class="badge badge-active">In Stock</span></td>
+                                <td><button class="admin-btn-sm">Edit</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="admin-card">
+                    <h3>System Alerts</h3>
+                    <div class="auth-subtitle" style="text-align:left; margin:0; opacity: 0.8;">
+                        <p style="margin-bottom: 15px;">• 4 new inquiries for <strong>Lamborghini Revuelto</strong></p>
+                        <p style="margin-bottom: 15px;">• Inventory low for <strong>Toyota Camry</strong></p>
+                        <p style="margin-bottom: 15px;">• System backup completed successfully</p>
+                        <p style="margin-bottom: 15px;">• New operator registered: <strong>John Doe</strong></p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
