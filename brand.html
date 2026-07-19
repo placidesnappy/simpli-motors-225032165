@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Details</title>
+    <link rel="stylesheet" href="globals.css">
+    <script src="cars-data.js"></script>
+</head>
+<body class="brand-body">
+    <nav class="brand-nav" id="brand-nav-container">
+        <!-- Categories will be generated dynamically -->
+    </nav>
+
+    <section class="car-card-holder" id="car-card-holder-container">
+        <!-- Car cards will be generated dynamically -->
+    </section>
+
+    <script>
+        // Get the brand ID from URL query parameters (e.g. ?brand=toyota)
+        const urlParams = new URLSearchParams(window.location.search);
+        const brandId = urlParams.get('brand') || 'toyota';
+
+        // Find the brand object inside our CARS_DATA array
+        const brandData = CARS_DATA.find(item => item.id === brandId);
+
+        if (brandData) {
+            // Set the browser page title to the brand name
+            document.title = brandData.brand;
+
+            // 1. Generate the categories navigation bar
+            const navContainer = document.getElementById('brand-nav-container');
+            navContainer.innerHTML = ''; // Clear fallback content
+
+            brandData.categories.forEach((category, index) => {
+                const a = document.createElement('a');
+                a.href = '#';
+                a.textContent = category;
+                
+                // Set the first category as active by default
+                if (index === 0) {
+                    a.className = 'active';
+                }
+
+                // Add active tab switching functionality
+                a.onclick = function(event) {
+                    event.preventDefault();
+                    // Remove active class from all navigation links
+                    const links = navContainer.getElementsByTagName('a');
+                    for (let i = 0; i < links.length; i++) {
+                        links[i].className = '';
+                    }
+                    // Add active class to the clicked link
+                    a.className = 'active';
+                };
+
+                navContainer.appendChild(a);
+            });
+
+            // 2. Generate the car cards
+            const holderContainer = document.getElementById('car-card-holder-container');
+            holderContainer.innerHTML = ''; // Clear fallback content
+
+            brandData.cars.forEach(car => {
+                // Create the car card container
+                const card = document.createElement('div');
+                card.className = 'car-card';
+                card.style.cursor = 'pointer';
+
+                // Navigate to model details on click
+                card.onclick = function() {
+                    window.location.href = `model.html?brand=${brandId}&model=${encodeURIComponent(car.model)}`;
+                };
+
+                // Create the details section
+                const details = document.createElement('div');
+                details.className = 'car-details';
+
+                const h2 = document.createElement('h2');
+                h2.textContent = car.model;
+                details.appendChild(h2);
+
+                const p = document.createElement('p');
+                p.textContent = car.description;
+                details.appendChild(p);
+
+                const price = document.createElement('div');
+                price.className = 'car-price';
+                price.textContent = car.price;
+                details.appendChild(price);
+
+                card.appendChild(details);
+
+                // Create the image section
+                const imgDiv = document.createElement('div');
+                imgDiv.className = 'car-image';
+
+                const img = document.createElement('img');
+                img.src = car.image;
+                img.alt = car.alt;
+                imgDiv.appendChild(img);
+
+                card.appendChild(imgDiv);
+
+                // Create the next arrow section
+                const next = document.createElement('div');
+                next.className = 'car-next';
+
+                const span = document.createElement('span');
+                span.textContent = '>>';
+                next.appendChild(span);
+
+                card.appendChild(next);
+
+                // Append the complete card to the page
+                holderContainer.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>

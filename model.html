@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Details | Simpli Motors</title>
+    <link rel="stylesheet" href="globals.css">
+    <script src="cars-data.js"></script>
+    <style>
+        :root {
+            --accent: var(--yellow);
+            --card-bg: rgba(57, 63, 77, 0.4);
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-attachment: fixed;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .model-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header Navigation */
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 15px 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 212, 220, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--silver);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover {
+            color: var(--accent);
+            transform: translateX(-5px);
+        }
+
+        .model-title-group h1 {
+            color: var(--accent);
+            font-size: 1.8rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .model-price-tag {
+            font-size: 1.2rem;
+            color: var(--silver);
+            font-weight: 300;
+        }
+
+        /* Main Dashboard Area */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        .visual-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .car-hero-card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 40px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            border: 1px solid rgba(212, 212, 220, 0.1);
+            overflow: hidden;
+        }
+
+        .car-hero-card img {
+            max-width: 110%;
+            max-height: 110%;
+            object-fit: contain;
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
+            transition: 0.5s transform;
+        }
+
+        .car-hero-card:hover img {
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        /* Performance Dials */
+        .dials-container {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(29, 30, 34, 0.6);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(254, 218, 106, 0.1);
+        }
+
+        .dial {
+            text-align: center;
+            width: 100px;
+        }
+
+        .dial-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid var(--grey);
+            border-top-color: var(--accent);
+            margin: 0 auto 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: relative;
+            transition: 0.5s;
+        }
+
+        .dial-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--silver);
+            opacity: 0.6;
+        }
+
+        .active-dial {
+            box-shadow: 0 0 20px rgba(254, 218, 106, 0.3);
+            border-color: var(--accent);
+        }
+
+        /* Tabs System */
+        .info-panel {
+            background: var(--card-bg);
+            border-radius: 25px;
+            border: 1px solid rgba(212, 212, 220, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tab-nav {
+            display: flex;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            gap: 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: var(--silver);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: var(--slate);
+        }
+
+        .tab-content {
+            padding: 30px;
+            flex-grow: 1;
+            display: none;
+            animation: fadeInTab 0.4s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Specifications Grid */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .spec-item {
+            background: rgba(255,255,255,0.03);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .spec-label {
+            font-size: 0.8rem;
+            color: var(--silver);
+            opacity: 0.6;
+            margin-bottom: 5px;
+        }
+
+        .spec-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--silver);
+        }
+
+        /* Capabilities List */
+        .capabilities-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .mode-card {
+            background: rgba(255,255,255,0.03);
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .mode-card:hover, .mode-card.active {
+            background: rgba(254, 218, 106, 0.1);
+            border-color: var(--accent);
+        }
+
+        .mode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .mode-name {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .mode-desc {
+            font-size: 0.9rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Documentation Viewer */
+        .doc-viewer {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+            height: 400px;
+        }
+
+        .doc-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            border-right: 1px solid rgba(212, 212, 220, 0.1);
+        }
+
+        .doc-link {
+            padding: 10px;
+            font-size: 0.85rem;
+            color: var(--silver);
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+
+        .doc-link:hover, .doc-link.active {
+            background: rgba(254, 218, 106, 0.1);
+            color: var(--accent);
+        }
+
+        .doc-body {
+            overflow-y: auto;
+            padding-right: 10px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .doc-body h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        /* Maintenance Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .checklist-item input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        /* Interactive Controls */
+        .control-panel {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .action-btn {
+            background: var(--accent);
+            color: var(--slate);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(254, 218, 106, 0.4);
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="model-body">
+    
+    <div class="model-container">
+        <!-- Header -->
+        <header class="model-header">
+            <a href="#" id="back-link" class="back-btn">
+                <span>←</span> Back to Models
+            </a>
+            <div class="model-title-group">
+                <h1 id="model-name">Loading...</h1>
+                <span class="model-price-tag" id="model-price">...</span>
+            </div>
+            <div class="brand-badge" id="brand-badge">
+                <!-- Brand Badge -->
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-grid">
+            <!-- Visual Section -->
+            <section class="visual-panel">
+                <div class="car-hero-card">
+                    <img id="car-image" src="" alt="Car Image">
+                </div>
+
+                <!-- Dials -->
+                <div class="dials-container">
+                    <div class="dial">
+                        <div class="dial-circle" id="dial-speed">0</div>
+                        <div class="dial-label">MPH</div>
+                    </div>
+                    <div class="dial">
+                        <div class="dial-circle" id="dial-power">0</div>
+                        <div class="dial-label" id="power-label">RPM</div>
+                    </div>
+                    <div class="dial">
+                        <div class="dial-circle" id="dial-fuel">100</div>
+                        <div class="dial-label" id="fuel-label">Fuel %</div>
+                    </div>
+                </div>
+
+                <div class="control-panel">
+                    <button class="action-btn" id="start-btn">Start Engine</button>
+                    <button class="action-btn secondary" id="manual-btn">Open Manual</button>
+                </div>
+            </section>
+
+            <!-- Info Section -->
+            <section class="info-panel">
+                <nav class="tab-nav">
+                    <button class="tab-btn active" data-tab="specs">Specifications</button>
+                    <button class="tab-btn" data-tab="capabilities">Capabilities</button>
+                    <button class="tab-btn" data-tab="docs">Documentation</button>
+                    <button class="tab-btn" data-tab="maintenance">Maintenance</button>
+                </nav>
+
+                <!-- Specs Tab -->
+                <div class="tab-content active" id="tab-specs">
+                    <div class="specs-grid" id="specs-container">
+                        <!-- Dynamic Specs -->
+                    </div>
+                </div>
+
+                <!-- Capabilities Tab -->
+                <div class="tab-content" id="tab-capabilities">
+                    <div class="capabilities-list" id="capabilities-container">
+                        <!-- Dynamic Modes -->
+                    </div>
+                </div>
+
+                <!-- Documentation Tab -->
+                <div class="tab-content" id="tab-docs">
+                    <div class="doc-viewer">
+                        <div class="doc-sidebar" id="doc-chapters">
+                            <!-- Dynamic Chapters -->
+                        </div>
+                        <div class="doc-body" id="doc-content">
+                            <h3>Select a chapter</h3>
+                            <p>Select a chapter from the sidebar to view documentation details for this specific model.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Maintenance Tab -->
+                <div class="tab-content" id="tab-maintenance">
+                    <div class="maintenance-checklist" id="maintenance-container">
+                        <!-- Dynamic Maintenance -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 1. Data Initialization & Parsing
+        const urlParams = new URLSearchParams(window.location.search);
+        const brandId = urlParams.get('brand') || 'toyota';
+        const modelName = urlParams.get('model') || '';
+
+        const brandData = CARS_DATA.find(item => item.id === brandId);
+        const car = brandData ? brandData.cars.find(c => c.model === modelName) : null;
+
+        if (!car) {
+            window.location.href = 'brand.html';
+        }
+
+        // Setup Header & Basic Info
+        document.getElementById('model-name').textContent = car.model;
+        document.getElementById('model-price').textContent = car.price;
+        document.getElementById('car-image').src = car.image;
+        document.getElementById('car-image').alt = car.alt;
+        document.getElementById('back-link').href = `brand.html?brand=${brandId}`;
+
+        // Set Brand Badge
+        const badgeContainer = document.getElementById('brand-badge');
+        const logoName = (brandId === 'benz') ? 'mercedes-benz' : brandId;
+        badgeContainer.innerHTML = `<img src="assets/logos/thumb/${logoName}.png" alt="${brandData.brand}" style="height: 40px; filter: brightness(0) invert(1); opacity: 0.8;">`;
+
+        // 2. Dynamic Spec Generation Engine
+        function generateSpecs(car, brand) {
+            // Extract numeric price
+            const priceNum = parseInt(car.price.replace(/[$,]/g, '')) || 30000;
+            const isElectric = brand.id === 'tesla' || car.model.toLowerCase().includes('electric') || 
+                               car.model.toLowerCase().includes('e-tron') || car.model.toLowerCase().includes('taycan') ||
+                               car.model.toLowerCase().includes('eqs') || car.model.toLowerCase().includes('i7');
+            
+            // Heuristic-based realistic spec generation
+            const horsepower = Math.floor(150 + (priceNum / 800) + (Math.random() * 50));
+            const torque = Math.floor(horsepower * 0.95);
+            const zeroToSixty = (10 - (priceNum / 80000) - (isElectric ? 1.5 : 0)).toFixed(1);
+            const topSpeed = Math.floor(110 + (priceNum / 5000));
+            
+            const specs = [
+                { label: 'Horsepower', value: `${horsepower} HP` },
+                { label: 'Torque', value: `${torque} lb-ft` },
+                { label: '0-60 MPH', value: `${Math.max(2.1, zeroToSixty)}s` },
+                { label: 'Top Speed', value: `${Math.min(211, topSpeed)} MPH` },
+                { label: 'Drivetrain', value: priceNum > 60000 ? 'AWD' : 'FWD' },
+                { label: 'Transmission', value: isElectric ? 'Single-Speed' : (priceNum > 50000 ? '8-Speed Auto' : '6-Speed Auto') },
+                { label: isElectric ? 'Range' : 'Efficiency', value: isElectric ? `${Math.floor(250 + (priceNum/2000))} miles` : '28/34 MPG' }
+            ];
+
+            const container = document.getElementById('specs-container');
+            specs.forEach(spec => {
+                const div = document.createElement('div');
+                div.className = 'spec-item';
+                div.innerHTML = `<div class="spec-label">${spec.label}</div><div class="spec-value">${spec.value}</div>`;
+                container.appendChild(div);
+            });
+
+            // Update Labels for EV
+            if (isElectric) {
+                document.getElementById('power-label').textContent = 'POWER %';
+                document.getElementById('fuel-label').textContent = 'BATTERY %';
+            }
+
+            return { isElectric, horsepower, zeroToSixty, topSpeed };
+        }
+
+        const carSpecs = generateSpecs(car, brandData);
+
+        // 3. Drive Modes Simulation
+        const driveModes = [
+            { id: 'comfort', name: 'Comfort', desc: 'Smooth suspension and balanced power delivery.', accent: '#d4d4dc' },
+            { id: 'sport', name: 'Sport+', desc: 'Aggressive throttle mapping and stiffened steering.', accent: '#feda6a' },
+            { id: 'eco', name: 'Eco Pro', desc: 'Optimized for maximum efficiency and range.', accent: '#4CAF50' },
+            { id: 'track', name: 'Track Mode', desc: 'Full performance unleashed with minimized electronic aids.', accent: '#F44336' }
+        ];
+
+        const capContainer = document.getElementById('capabilities-container');
+        driveModes.forEach(mode => {
+            const div = document.createElement('div');
+            div.className = 'mode-card';
+            div.innerHTML = `
+                <div class="mode-header">
+                    <span class="mode-name">${mode.name}</span>
+                    <span class="mode-indicator">●</span>
+                </div>
+                <div class="mode-desc">${mode.desc}</div>
+            `;
+            div.onclick = () => {
+                document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+                div.classList.add('active');
+                document.documentElement.style.setProperty('--accent', mode.accent);
+                // Simulate dashboard feedback
+                if (engineRunning) {
+                    animateDial('dial-power', Math.random() * 20 + 40);
+                }
+            };
+            capContainer.appendChild(div);
+        });
+
+        // 4. Interactive Dials
+        let engineRunning = false;
+        const startBtn = document.getElementById('start-btn');
+        
+        function animateDial(id, target) {
+            const dial = document.getElementById(id);
+            let current = parseInt(dial.textContent);
+            const step = target > current ? 2 : -2;
+            const interval = setInterval(() => {
+                if ((step > 0 && current >= target) || (step < 0 && current <= target)) {
+                    clearInterval(interval);
+                    dial.textContent = Math.floor(target);
+                } else {
+                    current += step;
+                    dial.textContent = Math.floor(current);
+                }
+            }, 20);
+        }
+
+        startBtn.onclick = () => {
+            engineRunning = !engineRunning;
+            if (engineRunning) {
+                startBtn.textContent = 'Stop Engine';
+                startBtn.style.background = '#F44336';
+                document.querySelectorAll('.dial-circle').forEach(d => d.classList.add('active-dial'));
+                animateDial('dial-power', carSpecs.isElectric ? 15 : 800); // Idle RPM or Power
+                animateDial('dial-fuel', 98);
+            } else {
+                startBtn.textContent = 'Start Engine';
+                startBtn.style.background = 'var(--yellow)';
+                document.querySelectorAll('.dial-circle').forEach(d => d.classList.remove('active-dial'));
+                animateDial('dial-power', 0);
+                animateDial('dial-speed', 0);
+            }
+        };
+
+        // 5. Tabs Functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+            };
+        });
+
+        // 6. Documentation System
+        const docs = [
+            { title: 'Cockpit & Controls', content: `<h3>Master Your Domain</h3><p>The ${car.model} features a driver-centric cockpit designed for intuitive operation. The primary controls are positioned within easy reach, featuring tactile feedback and high-resolution digital displays.</p><ul><li><b>Multi-function Steering:</b> Control audio, cruise, and displays.</li><li><b>Digital Cluster:</b> Fully customizable instrumentation.</li><li><b>Infotainment:</b> 12.3-inch touchscreen with gesture control.</li></ul>` },
+            { title: 'Safety Systems', content: `<h3>Your Safety, Our Priority</h3><p>Equipped with the latest Simpli-Shield suite, the ${car.model} provides 360-degree protection using a combination of radar, LiDAR, and ultra-high-definition cameras.</p><ul><li><b>Auto-Braking:</b> Pedestrian and cyclist detection.</li><li><b>Lane Keeping:</b> Active steering correction.</li><li><b>Blind Spot Monitor:</b> Visual and audible alerts.</li></ul>` },
+            { title: 'Maintenance Guide', content: `<h3>Keep It Prime</h3><p>Routine maintenance is essential for longevity. Follow these basic guidelines for your ${car.model}:</p><ol><li>Check tire pressures weekly.</li><li>Verify fluid levels monthly.</li><li>Scheduled service every 6,000 miles.</li></ol>` }
+        ];
+
+        const chapterContainer = document.getElementById('doc-chapters');
+        docs.forEach((doc, idx) => {
+            const div = document.createElement('div');
+            div.className = 'doc-link';
+            div.textContent = doc.title;
+            div.onclick = () => {
+                document.querySelectorAll('.doc-link').forEach(l => l.classList.remove('active'));
+                div.classList.add('active');
+                document.getElementById('doc-content').innerHTML = doc.content;
+            };
+            chapterContainer.appendChild(div);
+            if (idx === 0) div.click();
+        });
+
+        // 7. Maintenance Checklist
+        const maintenance = [
+            { task: 'Oil & Filter Replacement', interval: '5,000 mi' },
+            { task: 'Tire Rotation & Balance', interval: '6,000 mi' },
+            { task: 'Brake Pad Inspection', interval: '12,000 mi' },
+            { task: 'Cabin Air Filter Change', interval: '15,000 mi' },
+            { task: 'Spark Plug Inspection', interval: '30,000 mi' },
+            { task: 'Battery Health Diagnostic', interval: 'Every 12mo' }
+        ];
+
+        const maintContainer = document.getElementById('maintenance-container');
+        maintenance.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'checklist-item';
+            div.innerHTML = `
+                <input type="checkbox">
+                <div class="maint-info">
+                    <div style="font-weight:600">${item.task}</div>
+                    <div style="font-size:0.8rem; opacity:0.6">Recommended at ${item.interval}</div>
+                </div>
+            `;
+            maintContainer.appendChild(div);
+        });
+
+        // Manual button opens the docs tab
+        document.getElementById('manual-btn').onclick = () => {
+            document.querySelector('[data-tab="docs"]').click();
+        };
+
+    </script>
+</body>
+</html>
